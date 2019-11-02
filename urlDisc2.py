@@ -18,21 +18,29 @@ def combine(ipFile, cfgFile):
 
 def get_url(url):
     r = requests.head(url)
-    if r.status_code == 200:
-        good_urls.append(urls)
+    if r.status_code:
+        good_urls.append(url)
     print(r.status_code, "---",url)
 
 
-list_of_urls = combine("ip.txt", "cfg.txt")
+list_of_urls = combine("ip.txt", "cfg.txt")[:10]
 
 start_time = time.time()
 
-with ThreadPoolExecutor(max_workers=100) as pool:
-    pool.map(get_url,list_of_urls)
 
-with open('good.txt', 'a') as good:
-    for url in good_urls:
-        good.write(url+'\n')
+with ThreadPoolExecutor(max_workers=50) as pool:
+    try:
+        pool.map(get_url,list_of_urls)
+    except KeyboardInterrupt:
+        produce()
+        sys.exit(1)
+    finally:
+        produce()
+
+def produce():
+    with open('good.txt', 'a') as good:
+        for url in good_urls:
+            good.write(url+'\n')
 
 
 print("--- %s seconds ---" % (time.time() - start_time))
