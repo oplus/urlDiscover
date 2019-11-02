@@ -23,7 +23,7 @@ def get_url(url):
     print(r.status_code, "---",url)
 
 
-list_of_urls = combine("ip.txt", "cfg.txt")[:10]
+list_of_urls = combine("ip.txt", "cfg.txt")
 
 start_time = time.time()
 
