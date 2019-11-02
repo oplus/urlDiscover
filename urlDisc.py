@@ -47,7 +47,7 @@ def combine(ipFile, cfgFile):
 #print(combine('ip.txt', 'cfgFile.txt'))  ###for testing
 start_time = time.time()
 try:
-    for url in combine("ip.txt", "cfg.txt"): #####################Change this line
+    for url in combine("ip.txt", "cfg.txt")[:10]: #####################Change this line
         q.put(url.strip())
     q.join()
 except KeyboardInterrupt:
