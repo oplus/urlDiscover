@@ -17,7 +17,7 @@ def getStatus(ourl):
     try:
         url = urlparse(ourl)
         conn = httplib.HTTPConnection(url.netloc)
-        conn.request("HEAD", url.path)
+        conn.request("HEAD", url.path,verify= False, timeout=10)
         res = conn.getresponse()
         return res.status, ourl
     except:
@@ -50,7 +50,7 @@ def combine(ipFile, cfgFile):
 #print(combine('ip.txt', 'cfgFile.txt'))  ###for testing
 start_time = time.time()
 try:
-    for url in combine("ip.txt", "cfg.txt")[:100]: #####################Change this line
+    for url in combine("ip.txt", "cfg.txt"): #####################Change this line
         q.put(url.strip())
     q.join()
 except KeyboardInterrupt:
