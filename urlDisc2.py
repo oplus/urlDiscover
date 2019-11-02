@@ -27,7 +27,11 @@ list_of_urls = combine("ip.txt", "cfg.txt")[:10]
 
 start_time = time.time()
 
-
+ef produce():
+    with open('good.txt', 'a') as good:
+        for url in good_urls:
+            good.write(url+'\n')
+            
 with ThreadPoolExecutor(max_workers=50) as pool:
     try:
         pool.map(get_url,list_of_urls)
