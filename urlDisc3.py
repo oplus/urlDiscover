@@ -2,6 +2,7 @@ from urlparse import urlparse
 from threading import Thread
 import httplib, sys
 from Queue import Queue
+import time
 
 concurrent = 200
 
