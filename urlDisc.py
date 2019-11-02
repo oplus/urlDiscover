@@ -1,28 +1,28 @@
-from urlparse import urlparse
+#from urlparse import urlparse
+import urllib.parse
 from threading import Thread
-import httplib, sys
-from Queue import Queue
+import http.client, sys
+from queue import Queue
 import time
-import sys
+import requests
 
 concurrent = 200
 
 def doWork():
     while True:
         url = q.get()
-        status, url = getStatus(url)
-        doSomethingWithResult(status, url)
+        status = getStatus(url)
+        #doSomethingWithResult(status, url)
         q.task_done()
 
 def getStatus(ourl):
+
     try:
-        url = urlparse(ourl)
-        conn = httplib.HTTPConnection(url.netloc)
-        conn.request("HEAD", url.path)
-        res = conn.getresponse()
-        return res.status, ourl
+        r = requests.get(ourl)
+        print(r.status_code, ourl)
     except:
-        return "error", ourl
+        print("Error", ourl)
+
 
 def doSomethingWithResult(status, url):
     print(status, url)
@@ -45,9 +45,9 @@ def combine(ipFile, cfgFile):
     return combined
 
 #print(combine('ip.txt', 'cfgFile.txt'))  ###for testing
-
+start_time = time.time()
 try:
-    for url in combine(sys.argv[1], sys.argv[2]):
+    for url in combine("ip.txt", "cfg.txt"): #####################Change this line
         q.put(url.strip())
     q.join()
 except KeyboardInterrupt:
