@@ -1,37 +1,40 @@
-#from urlparse import urlparse
-import urllib.parse
+from urlparse import urlparse
 from threading import Thread
-import http.client, sys
-from queue import Queue
+import httplib, sys
+from Queue import Queue
 import time
-import requests
-
 concurrent = 200
+good_urls = []
 
 def doWork():
     while True:
         url = q.get()
-        status = getStatus(url)
-        #doSomethingWithResult(status, url)
+        status, url = getStatus(url)
+        doSomethingWithResult(status, url)
         q.task_done()
 
 def getStatus(ourl):
-
     try:
-        r = requests.get(ourl)
-        print(r.status_code, ourl)
+        url = urlparse(ourl)
+        conn = httplib.HTTPConnection(url.netloc)
+        conn.request("HEAD", url.path)
+        res = conn.getresponse()
+        return res.status, ourl
     except:
-        print("Error", ourl)
-
+        return "error", ourl
 
 def doSomethingWithResult(status, url):
-    print(status, url)
+    print status, url
+    with open("good.txt", 'a') as good:
+        if status == 200:
+            good.write(url+'\n')
 
 q = Queue(concurrent * 2)
 for i in range(concurrent):
     t = Thread(target=doWork)
     t.daemon = True
     t.start()
+
 
 def combine(ipFile, cfgFile):
     with open("ip.txt", 'r') as ip:
