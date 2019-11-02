@@ -21,11 +21,11 @@ def get_url(url):
     print(r.status_code, "---",url)
 
 
-list_of_urls = combine("ip.txt", "cfg.txt")[:10]
+list_of_urls = combine("ip.txt", "cfg.txt")[:100]
 
 start_time = time.time()
 
-with ThreadPoolExecutor(max_workers=100) as pool:
+with ThreadPoolExecutor(max_workers=50) as pool:
     pool.map(get_url,list_of_urls)
 
 print("--- %s seconds ---" % (time.time() - start_time))
