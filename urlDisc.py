@@ -6,7 +6,7 @@ from queue import Queue
 import time
 import requests
 
-concurrent = 100
+concurrent = 200
 
 def doWork():
     while True:
